@@ -25,12 +25,8 @@ urlpatterns = [
     #path('', lambda request: redirect('blog/')),
     path('', lambda request: redirect('photo/')),
     path('admin/', admin.site.urls),
-    path('blog/newsletter/', include('newsletter.urls')),
     path('blog/', include('blog.urls')),
     path('photo/', include('fotoweb.urls')),
-    path('mycovidash/', include('mycovidash.urls')),
-    path('castles/', include('castles.urls')),
-    path('weather/', include('weather.urls')),
     #path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

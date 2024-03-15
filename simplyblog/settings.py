@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$6#)l_2$c8y=tp)=mrl9+znqa&=_$r1zteeg+3vdtxdldtgjd('
+SECRET_KEY = 'sdfa;c34534^&*&ASDADAS34676t)&^hgfsd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,12 +39,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'blog',
-    'newsletter',
-    'gellifinsta',
     'fotoweb',
-    'mycovidash',
-    'castles',
-    'weather',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -101,8 +96,7 @@ TEMPLATES = [
     },
 ]
 
-#TEMPLATE_SKIN = 'gellifique'
-TEMPLATE_SKIN = 'vallka'
+TEMPLATE_SKIN = 'valencian'
 
 WSGI_APPLICATION = 'simplyblog.wsgi.application'
 
