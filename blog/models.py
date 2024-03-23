@@ -13,6 +13,24 @@ from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 
 
+def custom_slugify(s):
+    replacements = {
+        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e',
+        'ё': 'e', 'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k',
+        'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r',
+        'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts',
+        'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ъ': '', 'ы': 'y', 'ь': '',
+        'э': 'e', 'ю': 'yu', 'я': 'ya',
+    }
+
+    def replace_char(c):
+        return replacements.get(c.group(), '')
+
+    s = re.sub('[а-яё]', replace_char, s.lower())
+    s = re.sub(r'\W+', '-', s)
+    s = s.strip('-')
+    return s
+
 # Create your models here.
 class Category(models.Model):
     class Meta:
@@ -27,7 +45,7 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.category)
+            self.slug = custom_slugify(self.category)
             
         super().save(*args, **kwargs)
 
@@ -74,43 +92,74 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = custom_slugify(self.title)
 
-        self.look_up_gellifique_product()
-            
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return '/blog/' + str(self.slug)        
+        return '/' + str(self.slug)        
 
-    def look_up_gellifique_product(self):
-        # [](https://www.gellifique.co.uk/en/pro-limited-edition/-periwinkle-hema-free(1342).html)
-
-        #print ('look_up_gellifique_product')
-
-        product_re = r"(\[\])\((https:\/\/gellifique.eu\/.+?\.html)\)"
-        product_re = r"(\[\])\((https:\/\/www.gellifique.co.uk\/.+?\.html)\)"
-        ##product_re = r"\((https:\/\/www.gellifique.co.uk\/.+\.html)\)"
-
-        prods = re.findall(product_re,self.text)
+    @property
+    def first_image(self):
+        img = re.search(r'\!\[\]\(([^)]+)\)',self.text)
+        if img and img.group(1):
+            return img.group(1)
         
-        if prods:
-            print (prods)
+        img = re.search(r'<img[^>]+src="(.*?)"',self.text)
+        if img and img.group(1):
+            return img.group(1)
 
-            for prod in prods:
-                print (prod[1])
-                prod_html = requests.get(prod[1])
-                if prod_html.status_code == 200:
-                    print ('soup::')
-                    prod_html = prod_html.text
+        return None
 
-                    soup = BeautifulSoup(prod_html, 'html.parser')
-                    prod_name = soup.find('h1',attrs={'itemprop':'name'})
-                    prod_price = soup.find(attrs={'itemprop':'price'})
-                    prod_img = soup.find('img',attrs={'itemprop':'image'})
+    @property
+    def first_p(self):
+        text = re.sub('~~([^~]+)~~',r'<s>\1</s>',self.text) # not in standard extensions
+        p = markdownify(text)
+        
+        p1 = ''
+        n = 0
+        while not p1 and p and n<=10:
+            n += 1
+            p = re.sub(r'^.*?<p>\s*','',p,flags=re.S)
+            p1 = re.sub('</p>.*$','',p,flags=re.S)
+            p1 = re.sub('<.*?>','',p1)
+            p1 = p1.strip()
+            if p1 and len(p1)>150: 
+                return p1
 
-                    print (prod_img['src'])
 
-                    self.text = re.sub(product_re,f"![]({prod_img['src']})\n[<h4>{prod_name.text} - {prod_price.text}</h4>]({prod[1]})",self.text,1)
+        p2 = ''
+        n = 0
+        while not p2 and p and n<=10:
+            n += 1
+            p = re.sub(r'^.*?<p>\s*','',p,flags=re.S)
+            p2 = re.sub('</p>.*$','',p,flags=re.S)
+            p2 = re.sub('<.*?>','',p2)
+            p2 = p2.strip()
+            if p1 and p2: 
+                return f'{p1}<br><br>{p2}'
+
+        return p1 + ' ' + p2
+
+    @property
+    def text_imageazed(self):
+        text = self.text
+        imgsm = re.search(r'(\s*\!\[\]\(([^)]+)\))+\s*$',self.text)
+        if imgsm:
+            imgs = imgsm.group(0).strip().split('![]')
+            #print (imgsm,imgsm.start(),imgs)
+            imgdiv = '\n<div id="gallery">\n'
+            for img in imgs:
+                if img:
+                    img = img.strip('() \n\r')
+                    #print(img)
+                    imgdiv += f'<a href="#"><img src="{img}" data-image="{img}" alt="" style="display: none;"></a>\n'
+
+            imgdiv += '</div>'
+            text = text[0:imgsm.start()] + imgdiv
+
+        return text
+
+
 
 

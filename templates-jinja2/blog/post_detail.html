@@ -9,6 +9,11 @@
 {{post.json_ld|safe}}
 {% endblock json_ld %}
 
+{% block skin_css %}
+{{ super() }}
+<link  href="/static/unitegallery/css/unite-gallery.css" rel='stylesheet' type='text/css' />
+{% endblock %}
+
 
 {% block content %}
 {% if post %}
@@ -33,7 +38,7 @@
       <div class="blog_header">
         <h1><a href="{{ url('blog:post', args=[post.slug]) }}">{{post.title}}</a></h1>
         <div class="blog_date">
-          Published {{ post.blog_start_dt }}
+          {{ post.blog_start_dt.strftime("%d.%m.%Y") if post.blog_start_dt else '' }}
         </div>
       </div>
       <div class="blog_body">
@@ -54,3 +59,23 @@
     </div>
     {% endif %}     
 {% endblock content %}
+
+{% block javascript %}
+{{ super() }}
+<script src="/static/unitegallery/js/unitegallery.js" type='text/javascript'  ></script>
+<script src="/static/unitegallery/themes/tiles/ug-theme-tiles.js" type='text/javascript'></script>
+<script type="text/javascript">
+  var api;
+  jQuery(document).ready(function(){
+
+    api = jQuery("#gallery").unitegallery({
+      gallery_theme: "tiles",
+      //tile_enable_textpanel:true,
+	    //tile_textpanel_title_text_align: "center"
+	    //tiles_type: "nested",
+	    tiles_type: "justified"
+    });
+  });
+  </script>
+{% endblock %}
+

@@ -8,19 +8,6 @@
 {% endblock skin_css %}
 
 {% block ga %}
-<script type="text/javascript">
-  (window.gaDevIds=window.gaDevIds||[]).push('d6YPbH');
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
-  ga('create', 'UA-35624881-1', 'auto');
-  ga('set', 'anonymizeIp', true);
-  ga('send', 'pageview');
-  ga('require', 'ec');
-</script>
-
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GEZJGB7EYT"></script>
 <script>
@@ -28,7 +15,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-GEZJGB7EYT', { 'debug_mode':true });
+  gtag('config', 'G-*********', { 'debug_mode':true });
 </script>    
 {% endblock ga %}
 
@@ -53,37 +40,13 @@
         {% endblock header_nav %} 
         {% block header_search %} 
         <form class="form-inline search-box d-flex justify-content-lg-end" action="{{ url( 'blog:search'  )}}">
-            <input name="q" class="form-control mr-sm-4" type="text" placeholder="Search Blog">
+            <input name="q" class="form-control mr-sm-4" type="text" placeholder="Search Blog" value="{{ q }}">
             <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
          </form>
         {% endblock header_search %} 
         </div>
 </nav>
 
-{% block breadcrumb %}
-<nav data-depth="3" class="breadcrumb hidden-sm-down">
-  <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
-          
-        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-          <a itemprop="item" href="{{ url( 'blog:list' )}}">
-            <span itemprop="name">Blog</span>
-          </a>
-          <meta itemprop="position" content="1">
-        </li>
-      
-          
-        {% if post %}
-        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-          <a itemprop="item" href="{{ post.get_absolute_url() }}">
-            <span itemprop="name">{{ breadcrumb }}</span>
-          </a>
-          <meta itemprop="position" content="2">
-        </li>
-        {% endif %}
-    
-  </ol>
-</nav>
-{% endblock breadcrumb %}
 
 {% endblock header %} 
 
