@@ -29,9 +29,9 @@
       <div class="blog_header row">
         <div class="col-3">
         {% if post.first_image %}
-            <img src="{{post.first_image}}">
+          <a href="{{ post.get_absolute_url() }}"><img src="{{post.first_image}}"></a>
         {% else %}
-            <img src="">
+          <a href="{{ post.get_absolute_url() }}"><img src=""></a>
         {% endif %}
         </div>
         <div class="col-9">
