@@ -25,25 +25,6 @@
 {% block content %}
 {% if post_list %}
   {% for post in post_list %}
-  {% if post.title_color %}
-    <style>
-      .blog_post_{{post.id}} .blog_header, 
-      .blog_post_{{post.id}} .blog_date, 
-      .blog_post_{{post.id}} .blog_header a {
-        color: {{post.title_color}} !important;
-      }
-    </style>
-  {% endif %}
-  {% if post.title_bgcolor %}
-    <style>
-      .blog_post_{{post.id}} .blog_header {
-        background-color: {{post.title_bgcolor}} !important;
-      }
-      .blog_post_{{post.id}} p a {
-          border-bottom-color: {{post.title_bgcolor}} !important;
-      }
-    </style>
-  {% endif %}
     <div class="blog_post blog_post_{{post.id}}">
       <div class="blog_header row">
         <div class="col-3">
