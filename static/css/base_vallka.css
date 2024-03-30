@@ -148,7 +148,7 @@ footer i,footer .copy {
   }
   
   .search-box {
-  width: 100%;
+  width: 38%;
   height: 50px;
   position: absolute;
   right: 0;
@@ -161,7 +161,7 @@ footer i,footer .copy {
   margin-left: -3rem;
   margin-right: 1rem;
   background-color: transparent;
-  color: #f0555b;
+  color: #fcdd09;
 }
 .search-box input {
   background-color: #f0555b;
@@ -170,6 +170,10 @@ footer i,footer .copy {
 .search-box input:focus {
   background-color: #f0555b;
   color: #fcdd09;
+}
+
+.search-box input::placeholder {
+  color: #d5ba01;
 }
   
 
