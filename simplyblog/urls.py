@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 
 urlpatterns = [
-    #path('', lambda request: redirect('blog/')),
+    path('', lambda request: redirect('category/chronicles/')),
     #path('', lambda request: redirect('photo/')),
     path('admin/', admin.site.urls),
     path('photo/', include('fotoweb.urls')),
